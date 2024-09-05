@@ -1,0 +1,9 @@
+.bsp/
+.bloop/
+.metals/
+.vscode/
+.idea/
+node_modules/
+target/
+dist/
+project/project
