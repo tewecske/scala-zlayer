@@ -81,7 +81,6 @@ object Service1 {
     di.provideConstructor(Service1.apply _)
 }
 
-/*
 final case class Service2(str: String)
 
 object Service2 {
@@ -104,7 +103,6 @@ object Service3 {
   implicit val default: di.Provider[(Service1, Service2), Service3] =
     di.provideConstructor(Service3.apply _)
 }
- */
 
 // CONSTRUCT AND USE DEPENDENCIES
 
@@ -131,24 +129,14 @@ object Main {
     import Provided._
 
     val service1: Service1 = di.provided[Service1]
-
-    /*
-      def provided[A](implicit pr: Provided[A]): A = pr
-      implicit val default: di.Provider[(Int, Boolean), Service1] =
-     */
-
-    // val service1 = di.provided[Service1](
-    //   Provided.providedFromProvider2(
-    //     Service1.default,
-    //     Provided.providedFromTrivialProvider(providedInt),
-    //     Provided.providedFromTrivialProvider(providedBoolean)
-    //   )
-    // )
     println(service1)
 
+    val service2: Service2 = di.provided[Service2]
+    println(service2)
+
     // Resolve Service3 dependency from Provided/Provider instances
-//     val service3 = di.provided[Service3]
-//     println(service3)
+    val service3 = di.provided[Service3]
+    println(service3)
   }
 }
 
