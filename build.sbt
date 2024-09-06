@@ -5,8 +5,8 @@ version := "0.0.1"
 val sharedSettings = Seq(
   scalacOptions ++= Seq(
     "-Xfatal-warnings",
-    // "-Xprint:typer",
-    "-Xlog-implicits"
+    "-Xprint:typer", "-Xlog-implicits", "-Vimplicits", "-Vimplicit-conversions", "-Vimplicits-verbose-tree",
+    //    "-Xlog-implicits-callsites",
   ),
   libraryDependencies ++= Seq(
     "org.scala-lang" % "scala-reflect" % Versions.Scala_2,

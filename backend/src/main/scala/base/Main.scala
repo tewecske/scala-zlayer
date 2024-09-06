@@ -49,12 +49,14 @@ object di {
     // ): Provided[B] =
     //   lyr(apr)
 
+/*
     implicit def providedFromProvider2[A1, A2, B](implicit
         lyr: Provider[(A1, A2), B],
         apr1: Provided[A1],
         apr2: Provided[A2]
     ): Provided[B] =
       lyr(apr1, apr2)
+*/
 
     // implicit def providedFromProvider[R, A](implicit
     //     lyr: Provider[R, A],
@@ -64,6 +66,12 @@ object di {
   }
 
   object Provided extends LowPriorityProvided {
+    implicit def providedNonEmptyTuple2[A, T1, T2](implicit
+                                                        apr: Provided[A],
+                                                        npr: Provided[(T1, T2)]
+                                                       ): Provided[(A, (T1, T2))] =
+      (apr, npr)
+
     implicit def providedNonEmptyTuple[A, T <: Product](implicit
         apr: Provided[A],
         npr: Provided[T]
@@ -90,6 +98,7 @@ object Service1 {
     di.provideConstructor(Service1.apply _)
 }
 
+/*
 final case class Service2(str: String)
 
 object Service2 {
@@ -112,6 +121,7 @@ object Service3 {
   implicit val default: di.Provider[(Service1, Service2), Service3] =
     di.provideConstructor(Service3.apply _)
 }
+*/
 
 // CONSTRUCT AND USE DEPENDENCIES
 
@@ -136,7 +146,14 @@ object Main {
 
   def main(args: Array[String]): Unit = {
     import Provided._
-    val service1 = di.provided[Service1]
+
+    val service1: Service1 = di.provided[Service1]
+
+    /*
+      def provided[A](implicit pr: Provided[A]): A = pr
+      implicit val default: di.Provider[(Int, Boolean), Service1] =
+    */
+
     // val service1 = di.provided[Service1](
     //   Provided.providedFromProvider2(
     //     Service1.default,
@@ -147,9 +164,8 @@ object Main {
     println(service1)
 
     // Resolve Service3 dependency from Provided/Provider instances
-    // val service3 = di.provided[Service3]
-
-    // println(service3)
+//     val service3 = di.provided[Service3]
+//     println(service3)
   }
 }
 
