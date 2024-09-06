@@ -14,17 +14,28 @@ else
   set shortmess=aoO
 endif
 badd +1 ~/projects/scala-projects/scala-zlayer
-badd +6 build.sbt
-badd +141 backend/src/main/scala/base/Main.scala
+badd +12 build.sbt
+badd +138 backend/src/main/scala/base/Main.scala
 badd +1 project/metals.sbt
 badd +214 .metals/readonly/dependencies/scala-library-2.13.13-sources.jar/scala/language.scala
 badd +54 .metals/readonly/dependencies/scala-library-2.13.13-sources.jar/scala/Function2.scala
 badd +24 .metals/readonly/dependencies/scala-library-2.13.13-sources.jar/scala/Tuple2.scala
 badd +25 .metals/readonly/dependencies/scala-library-2.13.13-sources.jar/scala/Tuple3.scala
+badd +174 ~/.config/nvim/init.lua
+badd +1821 /usr/share/nvim/runtime/lua/vim/diagnostic.lua
 argglobal
 %argdel
 $argadd ~/projects/scala-projects/scala-zlayer
-edit build.sbt
+edit backend/src/main/scala/base/Main.scala
+let s:save_splitbelow = &splitbelow
+let s:save_splitright = &splitright
+set splitbelow splitright
+wincmd _ | wincmd |
+vsplit
+1wincmd h
+wincmd w
+let &splitbelow = s:save_splitbelow
+let &splitright = s:save_splitright
 wincmd t
 let s:save_winminheight = &winminheight
 let s:save_winminwidth = &winminwidth
@@ -32,8 +43,9 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
+wincmd =
 argglobal
-balt backend/src/main/scala/base/Main.scala
+balt build.sbt
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -44,13 +56,40 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 6 - ((5 * winheight(0) + 17) / 35)
+let s:l = 167 - ((25 * winheight(0) + 17) / 35)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 6
-normal! 059|
+keepjumps 167
+normal! 06|
 lcd ~/projects/scala-projects/scala-zlayer
+wincmd w
+argglobal
+if bufexists(fnamemodify("~/projects/scala-projects/scala-zlayer/backend/src/main/scala/base/Main.scala", ":p")) | buffer ~/projects/scala-projects/scala-zlayer/backend/src/main/scala/base/Main.scala | else | edit ~/projects/scala-projects/scala-zlayer/backend/src/main/scala/base/Main.scala | endif
+if &buftype ==# 'terminal'
+  silent file ~/projects/scala-projects/scala-zlayer/backend/src/main/scala/base/Main.scala
+endif
+balt ~/.config/nvim/init.lua
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let &fdl = &fdl
+let s:l = 138 - ((11 * winheight(0) + 17) / 35)
+if s:l < 1 | let s:l = 1 | endif
+keepjumps exe s:l
+normal! zt
+keepjumps 138
+normal! 0
+lcd ~/projects/scala-projects/scala-zlayer
+wincmd w
+2wincmd w
+wincmd =
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

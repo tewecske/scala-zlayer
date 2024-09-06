@@ -30,60 +30,43 @@ object di {
     Provider[(A1, A2), B](f2.tupled)
 
   // A provided dependency of type A
-  type Provided[A] = A
+  // type Provided[A] = A
+  final case class Provided[A](a: A) extends AnyVal
 
   // Provide a simple value
-  def provide[A](value: A): Provided[A] = value
+  def provide[A](value: A): Provided[A] = Provided(value)
 
   // Provide a value lazily
   def provideSuspended[A](value: => A): Provider[Any, A] =
     Provider((_: Any) => value)
 
   // Retrieve a dependency of type A by resolving an implicit Provided[A] instance
-  def provided[A](implicit pr: Provided[A]): A = pr
+  def provided[A](implicit pr: Provided[A]): A = pr.a
 
   trait LowPriorityProvided {
-    // implicit def providedFromProvider1[A1, B](implicit
-    //     lyr: Provider[A1, B],
-    //     apr: Provided[A1]
-    // ): Provided[B] =
-    //   lyr(apr)
 
-/*
-    implicit def providedFromProvider2[A1, A2, B](implicit
-        lyr: Provider[(A1, A2), B],
-        apr1: Provided[A1],
-        apr2: Provided[A2]
-    ): Provided[B] =
-      lyr(apr1, apr2)
-*/
+    implicit def providedFromProvider[R, A](implicit
+        lyr: Provider[R, A],
+        apr: Provided[R]
+    ): Provided[A] =
+      Provided(lyr(apr.a))
 
-    // implicit def providedFromProvider[R, A](implicit
-    //     lyr: Provider[R, A],
-    //     apr: Provided[R]
-    // ): Provided[A] =
-    //   lyr(apr)
   }
 
   object Provided extends LowPriorityProvided {
-    implicit def providedNonEmptyTuple2[A, T1, T2](implicit
-                                                        apr: Provided[A],
-                                                        npr: Provided[(T1, T2)]
-                                                       ): Provided[(A, (T1, T2))] =
-      (apr, npr)
 
-    implicit def providedNonEmptyTuple[A, T <: Product](implicit
+    implicit def providedNonEmptyTuple[A, T](implicit
         apr: Provided[A],
         npr: Provided[T]
     ): Provided[(A, T)] =
-      (apr, npr)
+      Provided((apr.a, npr.a))
 
-    implicit val providedEmptyTuple: Provided[Unit] = ()
+    implicit val providedEmptyTuple: Provided[Unit] = Provided(())
 
     implicit def providedFromTrivialProvider[A](implicit
         pr: Provider[Any, A]
     ): Provided[A] =
-      pr(())
+      Provided(pr(()))
   }
 }
 
@@ -121,7 +104,7 @@ object Service3 {
   implicit val default: di.Provider[(Service1, Service2), Service3] =
     di.provideConstructor(Service3.apply _)
 }
-*/
+ */
 
 // CONSTRUCT AND USE DEPENDENCIES
 
@@ -152,7 +135,7 @@ object Main {
     /*
       def provided[A](implicit pr: Provided[A]): A = pr
       implicit val default: di.Provider[(Int, Boolean), Service1] =
-    */
+     */
 
     // val service1 = di.provided[Service1](
     //   Provided.providedFromProvider2(
